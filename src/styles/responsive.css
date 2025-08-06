@@ -1,0 +1,226 @@
+/* Responsive utilities and enhancements */
+
+/* Mobile-first responsive breakpoints */
+@layer utilities {
+  /* Hide scrollbars while maintaining functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mobile menu animations */
+  .mobile-menu-enter {
+    animation: slideInLeft 0.3s ease-out forwards;
+  }
+  
+  .mobile-menu-exit {
+    animation: slideOutLeft 0.3s ease-in forwards;
+  }
+
+  /* Card responsiveness */
+  .responsive-card {
+    @apply p-3 sm:p-4 md:p-6;
+  }
+
+  /* Text responsiveness */
+  .responsive-text-xs {
+    @apply text-xs sm:text-sm;
+  }
+  
+  .responsive-text-sm {
+    @apply text-sm sm:text-base;
+  }
+  
+  .responsive-text-base {
+    @apply text-base sm:text-lg;
+  }
+  
+  .responsive-text-lg {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+  
+  .responsive-text-xl {
+    @apply text-xl sm:text-2xl md:text-3xl;
+  }
+
+  /* Spacing responsiveness */
+  .responsive-spacing-sm {
+    @apply space-y-2 sm:space-y-3 md:space-y-4;
+  }
+  
+  .responsive-spacing-md {
+    @apply space-y-3 sm:space-y-4 md:space-y-6;
+  }
+  
+  .responsive-spacing-lg {
+    @apply space-y-4 sm:space-y-6 md:space-y-8;
+  }
+
+  /* Grid responsiveness */
+  .responsive-grid-auto {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+  
+  .responsive-grid-halves {
+    @apply grid grid-cols-1 lg:grid-cols-2;
+  }
+  
+  .responsive-grid-thirds {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+  }
+
+  /* Padding responsiveness */
+  .responsive-padding-sm {
+    @apply p-3 sm:p-4 lg:p-6;
+  }
+  
+  .responsive-padding-md {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+
+  /* Button responsiveness */
+  .responsive-button {
+    @apply px-3 py-2 text-sm sm:px-4 sm:py-2 sm:text-base;
+  }
+
+  /* Table responsiveness */
+  .responsive-table {
+    @apply text-xs sm:text-sm;
+  }
+  
+  .responsive-table th,
+  .responsive-table td {
+    @apply px-2 py-3 sm:px-4 md:px-6;
+  }
+
+  /* Chart container responsiveness */
+  .responsive-chart-container {
+    @apply h-48 sm:h-64 md:h-80 lg:h-96;
+  }
+
+  /* Mobile-specific utilities */
+  .mobile-only {
+    @apply block sm:hidden;
+  }
+  
+  .desktop-only {
+    @apply hidden sm:block;
+  }
+  
+  .tablet-and-up {
+    @apply hidden md:block;
+  }
+  
+  .mobile-and-tablet {
+    @apply block lg:hidden;
+  }
+}
+
+/* Animation keyframes */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile-first media queries for custom styling */
+@media (max-width: 640px) {
+  .mobile-full-width {
+    width: 100% !important;
+  }
+  
+  .mobile-text-center {
+    text-align: center !important;
+  }
+  
+  .mobile-hidden {
+    display: none !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-full-width {
+    width: 100% !important;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  .card-hover:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Larger touch targets */
+  button,
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .crisp-edges {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-full-width {
+    width: 100% !important;
+  }
+  
+  .card-hover {
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}
