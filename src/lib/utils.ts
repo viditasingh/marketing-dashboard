@@ -6,27 +6,30 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(amount: number): string {
+  // Use explicit locale and options to ensure consistency across server/client
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(Math.round(amount));
 }
 
 export function formatNumber(num: number): string {
-  if (num >= 1000000) {
-    return Math.round(num / 1000000 * 10) / 10 + "M";
+  // Ensure consistent number formatting
+  const roundedNum = Math.round(num);
+  if (roundedNum >= 1000000) {
+    return Math.round(roundedNum / 1000000 * 10) / 10 + "M";
   }
-  if (num >= 1000) {
-    return Math.round(num / 1000 * 10) / 10 + "K";
+  if (roundedNum >= 1000) {
+    return Math.round(roundedNum / 1000 * 10) / 10 + "K";
   }
-  return num.toString();
+  return roundedNum.toString();
 }
 
 export function formatPercentage(value: number): string {
-  const rounded = Math.round(value * 10) / 10;
-  return `${rounded > 0 ? "+" : ""}${rounded}%`;
+  const rounded = Math.round(value * 100) / 100; // More precise rounding
+  return `${rounded.toFixed(1)}%`;
 }
 
 export function getRandomColor(): string {
@@ -37,5 +40,7 @@ export function getRandomColor(): string {
     "var(--chart-4)",
     "var(--chart-5)",
   ];
-  return colors[Math.floor(Math.random() * colors.length)];
+  // Use a deterministic approach instead of Math.random()
+  const index = Date.now() % colors.length;
+  return colors[index];
 } 
