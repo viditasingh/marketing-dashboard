@@ -178,18 +178,30 @@ const ChartWidget: React.FC<ChartWidgetProps> = ({
         );
 
       default:
-        return null;
+        return (
+          <div className="flex items-center justify-center h-full text-muted-foreground">
+            <p>Unsupported chart type</p>
+          </div>
+        );
     }
   };
 
+  const chartContent = renderChart();
+
   return (
-    <Card className={cn("card-hover", className)}>
-      <CardHeader className="pb-2 sm:pb-4">
-        <CardTitle className="text-base sm:text-lg font-semibold">{title}</CardTitle>
+    <Card className={cn("card-hover w-full", className)}>
+      <CardHeader className="pb-2 sm:pb-4 px-3 sm:px-4 lg:px-6">
+        <CardTitle className="text-sm sm:text-base lg:text-lg font-semibold truncate">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="pt-0">
-        <div className="w-full" style={{ minHeight: height }}>
-          {renderChart()}
+      <CardContent className="pt-0 px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6">
+        <div className="w-full overflow-hidden" style={{ minHeight: height }}>
+          {type === "line" || type === "bar" || type === "pie" ? (
+            <ResponsiveContainer width="100%" height={height}>
+              {chartContent}
+            </ResponsiveContainer>
+          ) : (
+            chartContent
+          )}
         </div>
       </CardContent>
     </Card>

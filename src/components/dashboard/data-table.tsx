@@ -471,22 +471,22 @@ const DataTable: React.FC<DataTableProps> = ({
   const totalPages = Math.ceil(pagination.totalItems / pagination.itemsPerPage);
 
   return (
-    <Card className={cn("card-hover", className)}>
-      <CardHeader>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <CardTitle className="text-lg font-semibold">Campaign Performance</CardTitle>
-          <div className="flex items-center space-x-2">
+    <Card className={cn("card-hover w-full", className)}>
+      <CardHeader className="pb-4">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+          <CardTitle className="text-lg sm:text-xl font-semibold">Campaign Performance</CardTitle>
+          <div className="flex items-center justify-end space-x-2">
             <div className="relative" ref={exportMenuRef}>
-              <Button variant="outline" size="sm" onClick={() => setShowExportMenu(!showExportMenu)}>
+              <Button variant="outline" size="sm" onClick={() => setShowExportMenu(!showExportMenu)} className="w-full sm:w-auto">
                 <Download className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Export</span>
+                <span>Export</span>
               </Button>
               {showExportMenu && (
-                <div className="absolute right-0 top-10 z-50 bg-background border border-border rounded-md shadow-lg p-2 min-w-[120px]">
+                <div className="absolute right-0 top-10 z-50 bg-background border border-border rounded-md shadow-lg p-2 min-w-[140px] sm:min-w-[120px]">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start"
+                    className="w-full justify-start text-sm"
                     onClick={() => {
                       handleExport('csv');
                       setShowExportMenu(false);
@@ -497,7 +497,7 @@ const DataTable: React.FC<DataTableProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-start"
+                    className="w-full justify-start text-sm"
                     onClick={() => {
                       handleExport('pdf');
                       setShowExportMenu(false);
@@ -510,36 +510,45 @@ const DataTable: React.FC<DataTableProps> = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-          <div className="relative flex-1 max-w-sm">
+        
+        {/* Search and Filter Controls */}
+        <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+          <div className="relative flex-1 max-w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search campaigns..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-border rounded-md bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full pl-10 pr-4 py-2 text-sm border border-border rounded-md bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
-          <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}>
-            <Filter className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Filters</span>
-            {(filters.status !== "all" || filters.minSpend !== "" || filters.maxSpend !== "") && (
-              <span className="ml-1 h-2 w-2 bg-primary rounded-full"></span>
-            )}
-          </Button>
+          <div className="flex items-center justify-between sm:justify-end space-x-2">
+            <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)} className="flex-1 sm:flex-none">
+              <Filter className="h-4 w-4 mr-2" />
+              <span>Filters</span>
+              {(filters.status !== "all" || filters.minSpend !== "" || filters.maxSpend !== "") && (
+                <span className="ml-2 h-2 w-2 bg-primary rounded-full flex-shrink-0"></span>
+              )}
+            </Button>
+            
+            {/* Mobile stats summary */}
+            <div className="block sm:hidden text-xs text-muted-foreground bg-muted px-3 py-2 rounded-md">
+              {sortedData.length}/{data.length}
+            </div>
+          </div>
         </div>
 
         {/* Filter Panel */}
         {showFilters && (
-          <div className="border-t border-border pt-4 space-y-4">
+          <div className="border-t border-border pt-4 space-y-4 bg-muted/20 p-4 rounded-md">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">Status</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground block">Status</label>
                 <select
                   value={filters.status}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
-                  className="w-full p-2 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full p-3 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="all">All Status</option>
                   <option value="active">Active</option>
@@ -548,34 +557,34 @@ const DataTable: React.FC<DataTableProps> = ({
                 </select>
               </div>
               
-              <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">Min Spend</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground block">Min Spend ($)</label>
                 <input
                   type="number"
                   placeholder="0"
                   value={filters.minSpend}
                   onChange={(e) => handleFilterChange('minSpend', e.target.value)}
-                  className="w-full p-2 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full p-3 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
               
-              <div>
-                <label className="text-sm font-medium text-muted-foreground mb-2 block">Max Spend</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground block">Max Spend ($)</label>
                 <input
                   type="number"
                   placeholder="No limit"
                   value={filters.maxSpend}
                   onChange={(e) => handleFilterChange('maxSpend', e.target.value)}
-                  className="w-full p-2 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full p-3 border border-border rounded-md bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
               
-              <div className="flex items-end">
+              <div className="flex items-end space-y-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={clearFilters}
-                  className="w-full"
+                  className="w-full h-11"
                 >
                   <X className="h-4 w-4 mr-2" />
                   Clear Filters
@@ -583,14 +592,106 @@ const DataTable: React.FC<DataTableProps> = ({
               </div>
             </div>
             
-            <div className="text-xs text-muted-foreground">
-              Showing {sortedData.length} of {data.length} campaigns
+            <div className="flex items-center justify-between text-xs text-muted-foreground bg-background px-3 py-2 rounded border">
+              <span>Results: {sortedData.length} of {data.length} campaigns</span>
+              {sortedData.length !== data.length && (
+                <span className="text-primary font-medium">Filtered</span>
+              )}
             </div>
           </div>
         )}
       </CardHeader>
       <CardContent className="p-0">
-        <div className="overflow-x-auto mobile-scroll">
+        {/* Mobile Card View - Hidden on larger screens */}
+        <div className="block lg:hidden">
+          {loading ? (
+            <div className="space-y-4 p-4">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className="border border-border rounded-lg p-4 space-y-3 animate-pulse">
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="h-3 bg-muted rounded"></div>
+                    <div className="h-3 bg-muted rounded"></div>
+                    <div className="h-3 bg-muted rounded"></div>
+                    <div className="h-3 bg-muted rounded"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-3 p-4">
+              {sortedData.map((row, rowIndex) => (
+                <div key={rowIndex} className="border border-border rounded-lg p-4 space-y-3 hover:bg-muted/30 transition-colors">
+                  {/* Campaign Header */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-sm sm:text-base truncate">{row.campaign}</h3>
+                      <div className="mt-1">
+                        <span className={cn(
+                          "inline-flex px-2 py-1 rounded-full text-xs font-medium",
+                          row.status === "active" && "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+                          row.status === "paused" && "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+                          row.status === "completed" && "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                        )}>
+                          {row.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Key Metrics Grid */}
+                  <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm">
+                    <div className="space-y-1">
+                      <div className="text-muted-foreground">Spend</div>
+                      <div className="font-semibold text-red-600">{formatCurrency(row.spend)}</div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-muted-foreground">Revenue</div>
+                      <div className="font-semibold text-green-600">{formatCurrency(row.revenue)}</div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-muted-foreground">ROAS</div>
+                      <div className="font-semibold">{row.roas.toFixed(2)}x</div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="text-muted-foreground">CTR</div>
+                      <div className="font-semibold">{formatPercentage(row.ctr)}</div>
+                    </div>
+                  </div>
+                  
+                  {/* Additional Metrics - Collapsible */}
+                  <details className="group">
+                    <summary className="cursor-pointer text-xs sm:text-sm text-primary font-medium list-none flex items-center">
+                      <span>More details</span>
+                      <ChevronDown className="h-3 w-3 ml-1 transition-transform group-open:rotate-180" />
+                    </summary>
+                    <div className="mt-3 pt-3 border-t border-border grid grid-cols-2 gap-3 text-xs sm:text-sm">
+                      <div className="space-y-1">
+                        <div className="text-muted-foreground">Clicks</div>
+                        <div className="font-medium">{formatNumber(row.clicks)}</div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="text-muted-foreground">Impressions</div>
+                        <div className="font-medium">{formatNumber(row.impressions)}</div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="text-muted-foreground">CPC</div>
+                        <div className="font-medium">{formatCurrency(row.cpc)}</div>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="text-muted-foreground">Conversions</div>
+                        <div className="font-medium">{formatNumber(row.conversions)}</div>
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Table View - Hidden on mobile and tablet */}
+        <div className="hidden lg:block overflow-x-auto mobile-scroll">
           <table className="w-full min-w-[800px]">
             <thead>
               <tr className="border-b border-border">
@@ -654,31 +755,92 @@ const DataTable: React.FC<DataTableProps> = ({
           </table>
         </div>
         
-        {/* Pagination */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4 sm:px-6 py-4 border-t border-border">
-          <div className="text-sm text-muted-foreground text-center sm:text-left">
-            Showing {((pagination.currentPage - 1) * pagination.itemsPerPage) + 1} to{" "}
-            {Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalItems)} of{" "}
-            {pagination.totalItems} results
+        {/* Pagination - Responsive */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4 sm:px-6 py-4 border-t border-border bg-muted/10">
+          <div className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left order-2 sm:order-1">
+            <span className="hidden sm:inline">Showing </span>
+            <span className="font-medium">{((pagination.currentPage - 1) * pagination.itemsPerPage) + 1}-{Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalItems)}</span>
+            <span className="hidden sm:inline"> of </span>
+            <span className="sm:hidden">/</span>
+            <span className="font-medium">{pagination.totalItems}</span>
+            <span className="hidden sm:inline"> results</span>
           </div>
-          <div className="flex items-center justify-center space-x-2">
+          
+          <div className="flex items-center justify-center space-x-1 sm:space-x-2 order-1 sm:order-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => onPageChange?.(pagination.currentPage - 1)}
               disabled={pagination.currentPage <= 1}
+              className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
             >
               <ChevronLeft className="h-4 w-4" />
+              <span className="hidden sm:inline ml-1">Previous</span>
             </Button>
-            <span className="text-sm">
-              Page {pagination.currentPage} of {totalPages}
-            </span>
+            
+            {/* Page numbers for tablet and desktop */}
+            <div className="hidden sm:flex items-center space-x-1">
+              {totalPages <= 7 ? (
+                // Show all pages if 7 or fewer
+                Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant={page === pagination.currentPage ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => onPageChange?.(page)}
+                    className="h-8 w-8 text-xs"
+                  >
+                    {page}
+                  </Button>
+                ))
+              ) : (
+                // Show condensed pagination for more than 7 pages
+                <>
+                  {pagination.currentPage > 3 && (
+                    <>
+                      <Button variant="outline" size="sm" onClick={() => onPageChange?.(1)} className="h-8 w-8 text-xs">1</Button>
+                      {pagination.currentPage > 4 && <span className="text-muted-foreground text-xs">...</span>}
+                    </>
+                  )}
+                  
+                  {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
+                    const page = Math.max(1, Math.min(totalPages - 2, pagination.currentPage - 1)) + i;
+                    return (
+                      <Button
+                        key={page}
+                        variant={page === pagination.currentPage ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => onPageChange?.(page)}
+                        className="h-8 w-8 text-xs"
+                      >
+                        {page}
+                      </Button>
+                    );
+                  })}
+                  
+                  {pagination.currentPage < totalPages - 2 && (
+                    <>
+                      {pagination.currentPage < totalPages - 3 && <span className="text-muted-foreground text-xs">...</span>}
+                      <Button variant="outline" size="sm" onClick={() => onPageChange?.(totalPages)} className="h-8 w-8 text-xs">{totalPages}</Button>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+            
+            {/* Mobile page indicator */}
+            <div className="sm:hidden px-3 py-1 bg-background border border-border rounded text-xs font-medium">
+              {pagination.currentPage}/{totalPages}
+            </div>
+            
             <Button
               variant="outline"
               size="sm"
               onClick={() => onPageChange?.(pagination.currentPage + 1)}
               disabled={pagination.currentPage >= totalPages}
+              className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
             >
+              <span className="hidden sm:inline mr-1">Next</span>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

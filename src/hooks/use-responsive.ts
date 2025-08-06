@@ -21,10 +21,10 @@ export const useResponsive = (): BreakpointValues => {
     const updateValues = () => {
       const width = window.innerWidth;
       setValues({
-        isMobile: width < 640,
-        isTablet: width >= 640 && width < 1024,
-        isDesktop: width >= 1024 && width < 1280,
-        isLargeDesktop: width >= 1280,
+        isMobile: width < 768, // Increased from 640 to better handle larger phones and small tablets
+        isTablet: width >= 768 && width < 1024, // iPad range: 768px - 1023px
+        isDesktop: width >= 1024 && width < 1440, // Desktop range: 1024px - 1439px  
+        isLargeDesktop: width >= 1440, // Large desktop: 1440px+
         width,
       });
     };

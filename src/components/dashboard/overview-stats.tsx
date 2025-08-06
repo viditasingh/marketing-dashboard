@@ -47,21 +47,21 @@ const OverviewStats: React.FC<OverviewStatsProps> = ({ data, className }) => {
   ];
 
   return (
-    <div className={cn("grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6", className)}>
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6", className)}>
       {stats.map((stat, index) => (
-        <Card key={index} className="card-hover">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 sm:space-x-3">
-                <div className={cn("p-2 rounded-lg", stat.bgColor)}>
+        <Card key={index} className="card-hover transition-all duration-200 hover:shadow-md">
+          <CardContent className="p-3 sm:p-4 md:p-6">
+            <div className="flex items-center justify-between space-x-2">
+              <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+                <div className={cn("p-2 rounded-lg flex-shrink-0", stat.bgColor)}>
                   <stat.icon className={cn("h-4 w-4 sm:h-5 sm:w-5", stat.color)} />
                 </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-medium text-muted-foreground">{stat.title}</p>
-                  <p className="text-lg sm:text-2xl font-bold">{stat.value}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">{stat.title}</p>
+                  <p className="text-lg sm:text-xl md:text-2xl font-bold truncate">{stat.value}</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-1 flex-shrink-0">
                 {stat.change > 0 ? (
                   <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
                 ) : (
